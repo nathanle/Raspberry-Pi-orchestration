@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import subprocess
 import os
 import platform
@@ -8,20 +9,23 @@ HOST_VARS = {}
 ANSIBLE_INV = {}
 rpi_ip_list = []
 rpi_name_list = []
+rpi_mac_list = ('dc:a6:32', 'b8:27:eb')
 
 def nmap():
-	t = subprocess.Popen("nmap -sP 10.0.0.0/24",shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+	t = subprocess.Popen("nmap -sP 192.168.0.0/24",shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 	t.wait()
 
 def pi_search():
 	#print ('Searching for RPi')
 	#print ("---------------------------")
-	p = subprocess.Popen("arp -a | cut -f 2,4 -d ' ' ", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+	p = subprocess.Popen("/usr/sbin/arp -a | cut -f 2,4 -d ' ' ", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 	for line in p.stdout.readlines():
-		if line[-18:].startswith('b8:27:eb'):#eth0 mac : b8:27:eb
-			ip_is = str(re.findall( r'[0-9]+(?:\.[0-9]+){3}',line))[2:-2]
-			rpi_ip_list.append(ip_is)
-			#print ("This is RPi IP: " + ip_is)
+            line = line.decode("utf-8")
+            print(line)
+            if line[-18:].startswith(rpi_mac_list): #eth0 mac : b8:27:eb
+                    ip_is = str(re.findall( r'[0-9]+(?:\.[0-9]+){3}',line))[2:-2]
+                    rpi_ip_list.append(ip_is)
+                    #print ("This is RPi IP: " + ip_is)
 	#print ("---------------------------")
 def var_gen_host():
 	for i in range(len(rpi_ip_list)):
