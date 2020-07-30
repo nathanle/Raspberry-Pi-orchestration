@@ -21,7 +21,6 @@ def pi_search():
 	p = subprocess.Popen("/usr/sbin/arp -a | cut -f 2,4 -d ' ' ", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 	for line in p.stdout.readlines():
             line = line.decode("utf-8")
-            print(line)
             if line[-18:].startswith(rpi_mac_list): #eth0 mac : b8:27:eb
                     ip_is = str(re.findall( r'[0-9]+(?:\.[0-9]+){3}',line))[2:-2]
                     rpi_ip_list.append(ip_is)
