@@ -39,8 +39,10 @@ def var_gen_inv():
 	ANSIBLE_INV ["rpi"]={}
 	ANSIBLE_INV ["rpi"]["hosts"]=rpi_name_list
 	ANSIBLE_INV ["rpi"]["vars"] = {
-	            "ansible_ssh_user": "root",
-	            "ansible_ssh_private_key_file":"~/.ssh/dd_wrt"
+	            "ansible_ssh_user": "pi",
+	            "ansible_ssh_password": "raspberry",
+                    #"ansible_ssh_extra_args": "-o PasswordAuthentication=yes"
+	            "ansible_ssh_private_key_file":"~/.ssh/pi_cert"
 				}
 	return (ANSIBLE_INV)
 
